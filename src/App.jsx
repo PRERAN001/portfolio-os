@@ -135,9 +135,7 @@ function App() {
       onClick={handleClick}
     >
       {/* === 1. BACKGROUND LAYERS === */}
-      {bgIndex === 0 && <NetworkBackground />}
-      {bgIndex === 1 && <MatrixBackground />}
-      {bgIndex === 2 && <GridBackground />}
+      
 
       {/* Hero Text - Scaled down on Mobile */}
       <div

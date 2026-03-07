@@ -11,7 +11,7 @@ const ContextMenu = ({ x, y, closeMenu, onCommand }) => {
       <div className="flex flex-col text-sm text-gray-300">
         
         <MenuItem icon={<FaSyncAlt />} label="Refresh System" onClick={() => window.location.reload()} />
-        <MenuItem icon={<FaImage />} label="Change Background" onClick={() => onCommand('bg_toggle')} />
+       
         
         <div className="h-px bg-gray-700 my-1 mx-2"></div>
         

@@ -3,7 +3,7 @@ import React from 'react';
 const GridBackground = () => {
   return (
     <div className="absolute inset-0 z-0 bg-[#0a0a0a] overflow-hidden">
-      {/* Grid Pattern */}
+      
       <div 
         className="absolute inset-0 opacity-20"
         style={{
