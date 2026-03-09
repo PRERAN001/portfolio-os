@@ -3,20 +3,33 @@ import { FaPaperPlane, FaUser, FaEnvelope, FaCommentAlt } from 'react-icons/fa';
 
 const Contact = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [status, setStatus] = useState('idle'); // idle, sending, success
+  const [status, setStatus] = useState('idle');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const response=await fetch(`${import.meta.env.VITE_Backend_url}/sendemail`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(formData)
+
+    })
+    
     setStatus('sending');
     
     // Simulate network request
-    setTimeout(() => {
+    if(response.status==200){
+      setTimeout(() => {
       setStatus('success');
       setFormData({ name: '', email: '', message: '' });
       
       // Reset after showing success message
       setTimeout(() => setStatus('idle'), 3000);
     }, 1500);
+    }
+    else{
+      setStatus('idle');
+      alert('Failed to send message. Please try again later.');
+    }
   };
 
   return (
