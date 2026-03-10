@@ -26,7 +26,7 @@ const PROJECT_DATA = [
     tech: ["AWS", "React"],
     github: "https://github.com/PRERAN001/Error-Bot",
     demo: "https://www.linkedin.com/posts/preran-s-131077345_sign2speak-hackathon-aiforgood-activity-7332778471212933121-5naN?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFZUNvUBhE2dBBn8wqtzFzsxSP9CVLydN1w",
-    video: "https://youtube.com/watch?v=XXXX",
+    video: "https://www.youtube.com/watch?v=qcjzjRJDvXY",
     videoLabel: "Watch Demo on YouTube",  
     icon: <FaAws className="text-yellow-400" />,
   },
