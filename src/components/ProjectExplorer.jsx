@@ -71,6 +71,19 @@ const PROJECT_DATA = [
   },
   {
     id: 5,
+    title: "Uber Clone",
+    type: "Web Application",
+    description:
+      "A full-stack, real-time ride-sharing web application inspired by Uber. It supports two types of users — Passengers and Drivers — with live ride matching, interactive maps, and real-time trip status updates via WebSockets.",
+    tech: ["React", "Node.js"],
+    github: "https://github.com/PRERAN001/uber-clone-complete",
+    demo: "#",
+    video: "https://www.youtube.com/watch?v=xoE2H4UvaNE,   
+    videoLabel: "Watch Demo on YouTube",  
+    icon: <FaInfinity className="text-white" />,
+  },
+  {
+    id: 6,
     title: "the summarizer",
     type: "NLP Tool",
     description:
@@ -83,7 +96,7 @@ const PROJECT_DATA = [
     icon: <FaBrain className="text-purple-400" />,
   },
   {
-    id: 6,
+    id: 7,
     title: "Mini GPT (3 Lakh Words)",
     type: "Deep Learning Research",
     description:
@@ -96,7 +109,7 @@ const PROJECT_DATA = [
     icon: <FaBrain className="text-pink-400" />,
   },
   {
-    id: 7,
+    id: 8,
     title: "EDU-PORTAL",
     type: "Web Devlopment",
     description:
@@ -109,7 +122,7 @@ const PROJECT_DATA = [
     icon: <FaExpand className="text-pink-400" />,
   },
   {
-    id: 8,
+    id: 9,
     title: "errorpad",
     type: "Web Devlopment",
     description:
