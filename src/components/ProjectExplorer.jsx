@@ -78,7 +78,7 @@ const PROJECT_DATA = [
     tech: ["React", "Node.js"],
     github: "https://github.com/PRERAN001/uber-clone-complete",
     demo: "#",
-    video: "https://www.youtube.com/watch?v=xoE2H4UvaNE,   
+    video: "https://www.youtube.com/watch?v=xoE2H4UvaNE",   
     videoLabel: "Watch Demo on YouTube",  
     icon: <FaInfinity className="text-white" />,
   },
