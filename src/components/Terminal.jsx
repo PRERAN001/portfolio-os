@@ -33,7 +33,7 @@ const Terminal = ({ onClose, onCommand }) => {
         switch (cmd) {
           case "help":
             response =
-              "Commands: open [window], close [window], clear, exit, whoami";
+              "Commands: open [about|projects|skills|contact|terminal|blender], close [window], clear, exit, whoami";
             break;
           case "clear":
             setHistory([]);

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 
 // === COMPONENTS ===
+import { SiBlender } from "react-icons/si";
+import BlenderShowcase from "./components/BlenderShowcase";
 import Window from "./components/Window";
 import Terminal from "./components/Terminal";
 import Taskbar from "./components/Taskbar";
@@ -43,6 +45,7 @@ function App() {
     contact: false,
     performance: false,
     skills: false,
+    blender: false,
   });
 
   const [zIndexes, setZIndexes] = useState({
@@ -52,6 +55,7 @@ function App() {
     contact: 23,
     performance: 24,
     skills: 25,
+    blender: 26,
   });
 
   const [isSpotlightOpen, setIsSpotlightOpen] = useState(false);
@@ -202,6 +206,11 @@ function App() {
               onClick={() => toggleWindow("terminal")}
             />
             <MobileIcon
+              icon={<SiBlender />}
+              label="Blender"
+              onClick={() => toggleWindow("blender")}
+            />
+            <MobileIcon
               icon={<FaGithub />}
               label="GitHub"
               onClick={() => window.open("https://github.com", "_blank")}
@@ -214,48 +223,55 @@ function App() {
       ) : (
         // === DESKTOP LAYOUT ===
         // Added 'items-center' to center the icons and the new text
-        <div className="p-5 flex flex-col gap-6 absolute top-0 left-0 z-10 h-full items-center">
-          <DesktopIcon
-            icon={<FaFolder />}
-            label="about_me"
-            onClick={() => toggleWindow("about")}
-          />
-          <DesktopIcon
-            icon={<FaCode />}
-            label="projects"
-            onClick={() => toggleWindow("projects")}
-          />
-          <DesktopIcon
-            icon={<FaTools />}
-            label="skills"
-            onClick={() => toggleWindow("skills")}
-          />
-          <DesktopIcon
-            icon={<FaEnvelope />}
-            label="contact"
-            onClick={() => toggleWindow("contact")}
-          />
-          <DesktopIcon
-            icon={<FaTerminal />}
-            label="terminal"
-            onClick={() => toggleWindow("terminal")}
-          />
+        // === DESKTOP LAYOUT ===
+<div 
+  className="p-5 flex flex-col flex-wrap gap-x-10 gap-y-6 absolute top-0 left-0 z-10 max-h-[calc(100vh-100px)] items-start content-start"
+>
+  <DesktopIcon
+    icon={<FaFolder className="text-rose-700" />}
+    label="about_me"
+    onClick={() => toggleWindow("about")}
+  />
+  <DesktopIcon
+    icon={<FaCode  className="text-white"/>}
+    label="projects"
+    onClick={() => toggleWindow("projects")}
+  />
+  <DesktopIcon
+    icon={<FaTools className="text-blue-500"/>}
+    label="skills"
+    onClick={() => toggleWindow("skills")}
+  />
+  <DesktopIcon
+    icon={<FaEnvelope className="text-yellow-300" />}
+    label="contact"
+    onClick={() => toggleWindow("contact")}
+  />
+  <DesktopIcon
+    icon={<FaTerminal className="text-green-500" />}
+    label="terminal"
+    onClick={() => toggleWindow("terminal")}
+  />
+  <DesktopIcon
+    icon={<SiBlender className="text-orange-500" />} // Blender color pop
+    label="blender"
+    onClick={() => toggleWindow("blender")}
+  />
 
-          <div className="w-10 h-px bg-gray-700/50 mx-auto my-2"></div>
+  {/* Divider - will only show vertically within the column */}
+  <div className="w-10 h-px bg-gray-700/50 my-2 self-center"></div>
 
-          <DesktopIcon
-            icon={<FaGithub />}
-            label="github"
-            onClick={() => window.open("https://github.com", "_blank")}
-          />
-          <DesktopIcon
-            icon={<FaLinkedin />}
-            label="linkedin"
-            onClick={() => window.open("https://linkedin.com", "_blank")}
-          />
-
-          {/* DESKTOP QUOTE: Now inside the list, so it sits below LinkedIn */}
-        </div>
+  <DesktopIcon
+    icon={<FaGithub className="text-black" />}
+    label="github"
+    onClick={() => window.open("https://github.com/PRERAN001", "_blank")}
+  />
+  <DesktopIcon
+    icon={<FaLinkedin />}
+    label="linkedin"
+    onClick={() => window.open("https://linkedin.com", "_blank")}
+  />
+</div>
       )}
 
       {/* === 4. WINDOWS === */}
@@ -269,6 +285,18 @@ function App() {
         initialPosition={{ x: 350, y: 100 }}
       >
         <Skills />
+      </Window>
+      <Window
+        id="blender"
+        title="Blender_Viewport.exe"
+        isOpen={windows.blender}
+        onClose={() => toggleWindow("blender")}
+        zIndex={zIndexes.blender}
+        onFocus={() => bringToFront("blender")}
+        initialPosition={{ x: 150, y: 80 }}
+        initialWidth={950}
+      >
+        <BlenderShowcase />
       </Window>
 
       <Window

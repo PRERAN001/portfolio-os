@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaWindows, FaFolder, FaTerminal, FaCode } from 'react-icons/fa';
+import { SiBlender } from 'react-icons/si';
 
 const Taskbar = ({ windows, toggleWindow }) => {
   const [time, setTime] = useState(new Date());
@@ -43,6 +44,12 @@ const Taskbar = ({ windows, toggleWindow }) => {
           label="Terminal" 
           isOpen={windows.terminal} 
           onClick={() => toggleWindow('terminal')} 
+        />
+        <TaskbarItem 
+          icon={<SiBlender />} 
+          label="Blender" 
+          isOpen={windows.blender} 
+          onClick={() => toggleWindow('blender')} 
         />
       </div>
 

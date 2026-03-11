@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaSearch, FaTerminal, FaFolder, FaCode, FaEnvelope } from 'react-icons/fa';
+import { SiBlender } from 'react-icons/si';
 
 const Spotlight = ({ isOpen, onClose, onCommand }) => {
   const [query, setQuery] = useState('');
@@ -21,6 +22,7 @@ const Spotlight = ({ isOpen, onClose, onCommand }) => {
     { id: 'projects', label: 'Open Projects', icon: <FaCode />, action: () => onCommand('open projects') },
     { id: 'contact', label: 'Open Contact', icon: <FaEnvelope />, action: () => onCommand('open contact') },
     { id: 'terminal', label: 'Open Terminal', icon: <FaTerminal />, action: () => onCommand('open terminal') },
+    { id: 'blender', label: 'Open Blender Showcase', icon: <SiBlender />, action: () => onCommand('open blender') },
   ];
 
   const filteredCommands = commands.filter(cmd => 

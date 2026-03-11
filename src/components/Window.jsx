@@ -10,6 +10,7 @@ const Window = ({
   isOpen, 
   onClose, 
   initialPosition = { x:  0, y: 400 },
+  initialWidth = 600,
   zIndex = 10,
   onFocus
 }) => {
@@ -22,13 +23,13 @@ const Window = ({
   // Desktop: Draggable, Windowed
   const windowClasses = isMobile
     ? "fixed inset-0 w-full h-full bg-[#1c1c1c] z-[9999] flex flex-col animate-fade-in" // Mobile Classes
-    : "absolute flex flex-col bg-[#1c1c1c] border border-gray-700 rounded-lg shadow-2xl overflow-hidden w-[600px] max-w-[90vw]"; // Desktop Classes
+    : `absolute flex flex-col bg-[#1c1c1c] border border-gray-700 rounded-lg shadow-2xl overflow-hidden max-w-[90vw] max-h-[85vh]`; // Desktop Classes
 
   const Content = (
     <div 
       ref={nodeRef}
       className={windowClasses}
-      style={{ zIndex: zIndex }}
+      style={{ zIndex: zIndex, ...(!isMobile && { width: initialWidth }) }}
       onClick={onFocus}
     >
       {/* Header */}
