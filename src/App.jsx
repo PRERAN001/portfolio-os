@@ -181,37 +181,37 @@ function App() {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full px-8 z-10 flex flex-col items-center">
           <div className="grid grid-cols-3 gap-8 justify-items-center">
             <MobileIcon
-              icon={<FaFolder />}
+              icon={<FaFolder className="text-rose-700" />}
               label="About"
               onClick={() => toggleWindow("about")}
             />
             <MobileIcon
-              icon={<FaCode />}
+              icon={<FaCode  className="text-white"/>}
               label="Projects"
               onClick={() => toggleWindow("projects")}
             />
             <MobileIcon
-              icon={<FaTools />}
+              icon={<FaTools className="text-blue-500"/>}
               label="Skills"
               onClick={() => toggleWindow("skills")}
             />
             <MobileIcon
-              icon={<FaEnvelope />}
+              icon={<FaEnvelope className="text-yellow-300" />}
               label="Contact"
               onClick={() => toggleWindow("contact")}
             />
             <MobileIcon
-              icon={<FaTerminal />}
-              label="Term"
+              icon={<FaTerminal className="text-green-500" />}
+              label="Terminal"
               onClick={() => toggleWindow("terminal")}
             />
             <MobileIcon
-              icon={<SiBlender />}
+              icon={<SiBlender className="text-orange-500" />} 
               label="Blender"
               onClick={() => toggleWindow("blender")}
             />
             <MobileIcon
-              icon={<FaGithub />}
+              icon={<FaGithub className="text-black" />}
               label="GitHub"
               onClick={() => window.open("https://github.com", "_blank")}
             />
