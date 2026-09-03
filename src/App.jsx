@@ -1,441 +1,463 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from 'react';
+import { TiltCard } from '@/components/ui/TiltCard';
+import { FileTree } from '@/components/ui/FileTree';
+import { Badge } from '@/components/ui/Badge';
+import { GithubGraph } from "@/components/unlumen-ui/github-graph";
+import { Code2, Folder, Mail, Terminal, Gamepad2, Trophy, Coffee } from 'lucide-react';
+import { FaGithub, FaLinkedin } from 'react-icons/fa6';
 
-// === COMPONENTS ===
-import { SiBlender } from "react-icons/si";
-import BlenderShowcase from "./components/BlenderShowcase";
-import Window from "./components/Window";
-import Terminal from "./components/Terminal";
-import Taskbar from "./components/Taskbar";
-import Contact from "./components/Contact";
-import Spotlight from "./components/Spotlight";
-import NetworkBackground from "./components/NetworkBackground";
-import Hero from "./components/Hero";
-import SystemWidget from "./components/SystemWidget";
-import ShortcutsPanel from "./components/ShortcutsPanel";
-import ContextMenu from "./components/ContextMenu";
-import CustomCursor from "./components/CustomCursor";
-import Skills from "./components/Skills";
-import FloatingResume from "./components/FloatingResume";
-import useIsMobile from "./hooks/useIsMobile";
-import GlassyQuote from "./components/GlassyQuote";
-import ProjectExplorer from "./components/ProjectExplorer";
-import MatrixBackground from './components/MatrixBackground';
-import GridBackground from './components/GridBackground';
-// === ICONS ===
-import {
-  FaTerminal,
-  FaFolder,
-  FaCode,
-  FaEnvelope,
-  FaChartBar,
-  FaGithub,
-  FaLinkedin,
-  FaTools,
-} from "react-icons/fa";
+// ─────────────────────────────────────────────
+// DATA CONFIGURATION
+// ─────────────────────────────────────────────
 
-function App() {
-  const isMobile = useIsMobile();
-  const [bgIndex, setBgIndex] = useState(0);
+const FEATURED_PROJECTS = [
+  {
+    id: 'agent-sdk',
+    title: 'agent-sdk',
+    subtitle: 'Modular Autonomous AI Agent Framework',
+    description:
+      'A lightweight, extensible SDK for building autonomous AI agents with tool-use, persistent memory, and multi-step reasoning. Designed to wire custom MCP tools and local models into a deterministic execution loop with zero boilerplate.',
+    tags: ['Python', 'AI Agents', 'LLMs', 'Tool-Use', 'MCP', 'SDK'],
+    repo: 'https://github.com/PRERAN001/agents-sdk',
+    highlight: 'Modular · Extensible · Zero Boilerplate',
+  },
+  {
+    id: 'ide',
+    title: 'DAG IDE',
+    subtitle: 'Graph-Orchestrated Autonomous Development Environment',
+    description:
+      'An experimental AI-powered browser IDE built on a Planner → Execution → Verification architecture. Decomposes natural language prompts into executable dependency DAGs, dispatches tasks to parallel worker agents, and validates every build/lint artifact before delivery.',
+    tags: ['React', 'TypeScript', 'Node.js', 'Socket.IO', 'Monaco Editor', 'OpenRouter', 'MCP'],
+    repo: 'https://github.com/PRERAN001/ide',
+    highlight: 'DAG Planner · Parallel Workers · MCP Tools',
+    showTree: true,
+  },
+  {
+    id: 'instadeep_clone',
+    title: 'InstaDeep — Social Engine Architecture',
+    subtitle: 'High-Scale Feed Ranking & Recommendation Infrastructure',
+    description:
+      'A deep systems-level implementation of Instagram-grade infrastructure: ML-based feed scoring and ranking algorithms, story ordering pipelines, Edge cache + CDN hierarchy, real-time notification fanout (Kafka/Redis), and sub-millisecond timeline aggregation. Far beyond a CRUD app — an exploration of massive-scale social engineering.',
+    tags: ['System Architecture', 'ML Feed Ranking', 'Redis Streams', 'Kafka', 'Edge CDN', 'PostgreSQL', 'React'],
+    repo: 'https://github.com/PRERAN001/INSTA_DEEP_CLONE',
+    highlight: 'ML Ranking · Fanout Pipeline · Sub-ms Timeline',
+  },
+  {
+    id: 'sitecmd',
+    title: 'sitecmd',
+    subtitle: 'Web-to-CLI Interaction Compiler',
+    description:
+      'A terminal utility that compiles interactive browser sessions into reusable, parameterized CLI commands. Record browser actions once, replay them from the shell with dynamic arguments — zero Playwright scripting needed. Natively manages persistent auth, MFA/OTP tokens, OAuth flows, and cron pipelines.',
+    tags: ['Node.js', 'Playwright', 'CLI Tooling', 'Browser Automation', 'npm'],
+    repo: 'https://github.com/PRERAN001/sitecmd',
+    highlight: 'Zero-Code Automation · Shell-Friendly · Local Auth',
+  },
+];
 
-  // === STATES ===
-  const [windows, setWindows] = useState({
-    about: true, // You might want to set this to false on mobile by default
-    terminal: false,
-    projects: false,
-    contact: false,
-    performance: false,
-    skills: false,
-    blender: false,
-  });
+const DAG_TREE_DATA = [
+  {
+    name: 'dag-ide-core',
+    type: 'folder',
+    defaultOpen: true,
+    children: [
+      {
+        name: 'planner/',
+        type: 'folder',
+        tag: 'LLM Graph',
+        defaultOpen: true,
+        children: [
+          { name: 'intent-analyzer.ts', highlight: true },
+          { name: 'task-decomposer.ts' },
+          { name: 'dag-builder.ts', highlight: true },
+        ],
+      },
+      {
+        name: 'engine/',
+        type: 'folder',
+        tag: 'Parallel Workers',
+        children: [
+          { name: 'task-dispatcher.ts' },
+          { name: 'worker-pool.ts' },
+        ],
+      },
+      {
+        name: 'verifier/',
+        type: 'folder',
+        tag: 'Build & Lint QA',
+        children: [
+          { name: 'build-verifier.ts' },
+          { name: 'test-runner.ts' },
+        ],
+      },
+      {
+        name: 'mcp-servers/',
+        type: 'folder',
+        tag: 'Git/Mongo/FS',
+      },
+    ],
+  },
+];
 
-  const [zIndexes, setZIndexes] = useState({
-    about: 20,
-    terminal: 21,
-    projects: 22,
-    contact: 23,
-    performance: 24,
-    skills: 25,
-    blender: 26,
-  });
+const EXPLORE_PROJECTS = [
+  {
+    id: 'grepme-X',
+    title: 'grepme-X',
+    desc: 'Regex-powered CLI tool that statically analyzes Node.js codebases and auto-generates structured, accurate READMEs — zero LLM required.',
+    lang: 'JavaScript',
+    repo: 'https://github.com/PRERAN001/grepme-X',
+  },
+  {
+    id: 'Chat',
+    title: 'Chat Engine',
+    desc: 'Real-time bidirectional messaging application built with Next.js, Socket.IO, and room partitioning.',
+    lang: 'TypeScript',
+    repo: 'https://github.com/PRERAN001',
+  },
+  {
+    id: 'Agentpay-MONAD-BLITZ',
+    title: 'Agentpay',
+    desc: ' Autonomous AI Agent Economic Network on Monad Testnet.',
+    lang: 'React',
+    repo: 'https://github.com/PRERAN001/Agentpay-MONAD-BLITZ',
+  },
+  {
+    id: 'more',
+    title: '38+ more repositories',
+    desc: 'Explore open source experiments, CLI utilities, and systems code on GitHub.',
+    lang: 'View All →',
+    repo: 'https://github.com/PRERAN001?tab=repositories',
+  },
+];
 
-  const [isSpotlightOpen, setIsSpotlightOpen] = useState(false);
-  const [contextMenu, setContextMenu] = useState({
-    visible: false,
-    x: 0,
-    y: 0,
-  });
+const SKILLS = [
+  'JavaScript', 'TypeScript', 'Python', 'React', 'Next.js','pyrotch',
+  'Node.js', 'Express', 'FastAPI', 'Tailwind CSS', 'MongoDB',
+  'PostgreSQL', 'C','C++'  ,'Socket.IO', 'Playwright',
+  'Docker', 'Git', 'LLMs / AI Agents', 'MCP Protocol',
+  'System Design', 'CLI Tooling', 'WebSockets',
+];
 
-  // === HANDLERS ===
-  const bringToFront = (id) => {
-    setZIndexes((prev) => {
-      const highest = Math.max(...Object.values(prev));
-      if (prev[id] === highest) return prev;
-      return { ...prev, [id]: highest + 1 };
-    });
-  };
+// ─────────────────────────────────────────────
+// MAIN APP COMPONENT
+// ─────────────────────────────────────────────
 
-  const toggleWindow = (id, forceOpen = null) => {
-    setWindows((prev) => ({
-      ...prev,
-      [id]: forceOpen !== null ? forceOpen : !prev[id],
-    }));
-    if (forceOpen !== false) {
-      bringToFront(id);
-    }
-  };
-
-  const handleContextMenu = (e) => {
-    e.preventDefault();
-    setContextMenu({ visible: true, x: e.clientX, y: e.clientY });
-  };
-
-  const handleClick = () => {
-    if (contextMenu.visible) setContextMenu({ ...contextMenu, visible: false });
-  };
-
-  const handleCommand = (cmd) => {
-    const args = cmd.split(" ");
-    const command = args[0].toLowerCase();
-    const target = args[1]?.toLowerCase();
-
-    if(command === 'bg_toggle') {
-        setBgIndex(prev => (prev + 1) % 3); // Cycle: 0 -> 1 -> 2 -> 0
-        return;
-    }
-
-    switch (command) {
-      case "open":
-        if (target && windows.hasOwnProperty(target)) {
-          toggleWindow(target, true);
-        }
-        break;
-      case "close":
-        if (target && windows.hasOwnProperty(target)) {
-          toggleWindow(target, false);
-        }
-        break;
-      default:
-        break;
-    }
-  };
-
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.ctrlKey && e.key === "k") {
-        e.preventDefault();
-        setIsSpotlightOpen((prev) => !prev);
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+export default function App() {
+  const [showExplore, setShowExplore] = useState(false);
 
   return (
-    <div
-      className={`h-screen w-screen bg-black relative overflow-hidden text-white font-mono selection:bg-cyan-500/30 ${
-        !isMobile ? "cursor-none" : ""
-      }`}
-      onContextMenu={handleContextMenu}
-      onClick={handleClick}
-    >
-      {/* === 1. BACKGROUND LAYERS === */}
-      
+    <div className="min-h-screen bg-white text-zinc-900 font-sans selection:bg-zinc-900 selection:text-white antialiased">
 
-      {/* Hero Text - Scaled down on Mobile */}
-      <div
-        className={`${
-          isMobile ? "scale-50 origin-top top-10 absolute w-full" : ""
-        }`}
-      >
-        <Hero />
-      </div>
+      {/* ── TOP NAVIGATION ── */}
+      <nav className="max-w-4xl mx-auto px-5 sm:px-6 pt-10 pb-0 flex items-center justify-between border-b border-zinc-200 pb-6">
+        <div className="flex items-center gap-2.5">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="font-mono text-sm text-zinc-900 font-semibold tracking-wide">
+            PRERAN S
+          </span>
+          <Badge variant="default" className="ml-1 text-[10px] py-0 px-1.5 hidden sm:inline-flex bg-zinc-100 text-zinc-700 border-zinc-200">
+            building
+          </Badge>
+        </div>
 
-      <div className="absolute inset-0 pointer-events-none z-50 scanlines opacity-50"></div>
+        <div className="flex items-center gap-5 font-mono text-xs text-zinc-600">
+          <a
+            href="https://github.com/PRERAN001"
+            target="_blank"
+            rel="noreferrer"
+            className="hover:text-zinc-900 transition-colors flex items-center gap-1.5"
+          >
+            <FaGithub className="w-3.5 h-3.5" />
+            GitHub
+          </a>
+          <a
+            href="https://www.linkedin.com/in/preran-s-131077345"
+            target="_blank"
+            rel="noreferrer"
+            className="hover:text-zinc-900 transition-colors flex items-center gap-1.5"
+          >
+            <FaLinkedin className="w-3.5 h-3.5" />
+            LinkedIn
+          </a>
+          <a
+            href="mailto:preran248@gmail.com"
+            className="hover:text-zinc-900 transition-colors flex items-center gap-1"
+          >
+            <Mail className="w-3.5 h-3.5" />
+            Email
+          </a>
+        </div>
+      </nav>
 
-      {/* === 2. DESKTOP WIDGETS (Hidden on Mobile) === */}
-      {!isMobile && (
-        <>
-          <SystemWidget />
-          <ShortcutsPanel />
-          <CustomCursor />
-        </>
-      )}
+      {/* ── MAIN CONTENT ── */}
+      <main className="max-w-4xl mx-auto px-5 sm:px-6 pt-16 pb-24 space-y-20">
 
-      {/* Big Clock (Bottom Right) */}
-      <div className="absolute bottom-16 right-10 text-right z-0 pointer-events-none select-none">
-        <h1 className="text-6xl md:text-8xl font-bold text-white/10 tracking-tighter font-mono">
-          {
-            new Date()
-              .toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-              .split(" ")[0]
-          }
-        </h1>
-        <p className="text-sm md:text-xl text-cyan-500/20 font-mono font-bold uppercase tracking-widest mr-1">
-          SYSTEM_ONLINE
-        </p>
-      </div>
+        {/* ── HERO ── */}
+        <section>
+          <h1 className="text-3xl sm:text-5xl font-bold text-zinc-900 tracking-tight leading-[1.15] mb-4">
+            Preran S
+          </h1>
 
-      {/* === 3. ICONS LAYOUT (Responsive Switch) === */}
-      {isMobile ? (
-        // === MOBILE LAYOUT ===
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full px-8 z-10 flex flex-col items-center">
-          <div className="grid grid-cols-3 gap-8 justify-items-center">
-            <MobileIcon
-              icon={<FaFolder className="text-rose-700" />}
-              label="About"
-              onClick={() => toggleWindow("about")}
-            />
-            <MobileIcon
-              icon={<FaCode  className="text-white"/>}
-              label="Projects"
-              onClick={() => toggleWindow("projects")}
-            />
-            <MobileIcon
-              icon={<FaTools className="text-blue-500"/>}
-              label="Skills"
-              onClick={() => toggleWindow("skills")}
-            />
-            <MobileIcon
-              icon={<FaEnvelope className="text-yellow-300" />}
-              label="Contact"
-              onClick={() => toggleWindow("contact")}
-            />
-            <MobileIcon
-              icon={<FaTerminal className="text-green-500" />}
-              label="Terminal"
-              onClick={() => toggleWindow("terminal")}
-            />
-            <MobileIcon
-              icon={<SiBlender className="text-orange-500" />} 
-              label="Blender"
-              onClick={() => toggleWindow("blender")}
-            />
-            <MobileIcon
-              icon={<FaGithub className="text-black" />}
-              label="GitHub"
-              onClick={() => window.open("https://github.com", "_blank")}
-            />
+          <p className="text-lg sm:text-xl text-zinc-600 font-medium mb-6">
+             AI · Systems · Agents · Architecture
+          </p>
+
+          <p className="text-zinc-600 text-sm sm:text-base leading-relaxed max-w-2xl mb-6">
+            Computer Science student architecting autonomous AI agent loops, graph-based execution IDEs,
+            deep social feed pipelines, and developer CLI utilities. Based in Bangalore.
+          </p>
+
+          {/* AFK / lifestyle links */}
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-xs text-zinc-500">
+            <span className="text-zinc-600 font-medium">afk:</span>
+           
+            <a
+              href="https://github.com/PRERAN001"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-zinc-900 transition-colors flex items-center gap-1"
+            >
+              <Code2 className="w-3 h-3" />
+              Open Source
+            </a>
+            <span className="flex items-center gap-1 text-zinc-500">
+              <Gamepad2 className="w-3 h-3" />
+              Gaming
+            </span>
+            
+          </div>
+        </section>
+
+        {/* ── FEATURED PROJECTS ── */}
+        <section>
+          <div className="flex items-center gap-2 mb-6">
+            <Folder className="w-4 h-4 text-zinc-500" />
+            <p className="font-mono text-zinc-500 text-sm select-none">// projects</p>
           </div>
 
-          {/* Mobile Quote Position */}
-          <GlassyQuote isMobile={true} />
-        </div>
-      ) : (
-        // === DESKTOP LAYOUT ===
-        // Added 'items-center' to center the icons and the new text
-        // === DESKTOP LAYOUT ===
-<div 
-  className="p-5 flex flex-col flex-wrap gap-x-10 gap-y-6 absolute top-0 left-0 z-10 max-h-[calc(100vh-100px)] items-start content-start"
->
-  <DesktopIcon
-    icon={<FaFolder className="text-rose-700" />}
-    label="about_me"
-    onClick={() => toggleWindow("about")}
-  />
-  <DesktopIcon
-    icon={<FaCode  className="text-white"/>}
-    label="projects"
-    onClick={() => toggleWindow("projects")}
-  />
-  <DesktopIcon
-    icon={<FaTools className="text-blue-500"/>}
-    label="skills"
-    onClick={() => toggleWindow("skills")}
-  />
-  <DesktopIcon
-    icon={<FaEnvelope className="text-yellow-300" />}
-    label="contact"
-    onClick={() => toggleWindow("contact")}
-  />
-  <DesktopIcon
-    icon={<FaTerminal className="text-green-500" />}
-    label="terminal"
-    onClick={() => toggleWindow("terminal")}
-  />
-  <DesktopIcon
-    icon={<SiBlender className="text-orange-500" />} // Blender color pop
-    label="blender"
-    onClick={() => toggleWindow("blender")}
-  />
+          <div className="space-y-6">
+            {FEATURED_PROJECTS.map((project) => (
+              <div
+                key={project.id}
+                className="p-6 sm:p-8 bg-zinc-50 rounded-xl hover:bg-zinc-100 transition-all group cursor-pointer"
+                onClick={() => window.open(project.repo, '_blank')}
+              >
+                <div className="flex items-start justify-between gap-4 mb-3">
+                  <div>
+                    <h3 className="font-mono text-zinc-900 text-base sm:text-lg font-semibold tracking-tight group-hover:text-zinc-700">
+                      {project.title}
+                    </h3>
+                    {project.highlight && (
+                      <p className="font-mono text-[11px] text-emerald-600 mt-0.5 tracking-wide">
+                        {project.highlight}
+                      </p>
+                    )}
+                  </div>
+                  <span className="text-zinc-400 group-hover:text-zinc-600 transition-colors text-lg leading-none mt-0.5 flex-shrink-0">
+                    ↗
+                  </span>
+                </div>
 
-  {/* Divider - will only show vertically within the column */}
-  <div className="w-10 h-px bg-gray-700/50 my-2 self-center"></div>
+                {project.subtitle && (
+                  <p className="font-mono text-xs text-zinc-500 mb-3">{project.subtitle}</p>
+                )}
 
-  <DesktopIcon
-    icon={<FaGithub className="text-black" />}
-    label="github"
-    onClick={() => window.open("https://github.com/PRERAN001", "_blank")}
-  />
-  <DesktopIcon
-    icon={<FaLinkedin />}
-    label="linkedin"
-    onClick={() => window.open("https://linkedin.com", "_blank")}
-  />
-</div>
-      )}
+                <p className="text-zinc-600 text-sm leading-relaxed mb-5">
+                  {project.description}
+                </p>
 
-      {/* === 4. WINDOWS === */}
-      <Window
-        id="skills"
-        title="tech_stack.json"
-        isOpen={windows.skills}
-        onClose={() => toggleWindow("skills")}
-        zIndex={zIndexes.skills}
-        onFocus={() => bringToFront("skills")}
-        initialPosition={{ x: 350, y: 100 }}
-      >
-        <Skills />
-      </Window>
-      <Window
-        id="blender"
-        title="Blender_Viewport.exe"
-        isOpen={windows.blender}
-        onClose={() => toggleWindow("blender")}
-        zIndex={zIndexes.blender}
-        onFocus={() => bringToFront("blender")}
-        initialPosition={{ x: 150, y: 80 }}
-        initialWidth={950}
-      >
-        <BlenderShowcase />
-      </Window>
+                {/* Embedded File Tree for DAG IDE */}
+                {project.showTree && (
+                  <div className="mb-4">
+                    <p className="font-mono text-[11px] text-zinc-500 mb-2">Architecture Spec:</p>
+                    <FileTree items={DAG_TREE_DATA} />
+                  </div>
+                )}
 
-      <Window
-        id="about"
-        title="system_profile.txt"
-        isOpen={windows.about}
-        onClose={() => toggleWindow("about")}
-        zIndex={zIndexes.about}
-        onFocus={() => bringToFront("about")}
-      >
-        <div className="p-6 text-gray-300 font-mono">
-          <h2 className="text-2xl font-bold text-cyan-400 mb-4 tracking-widest animate-pulse">
-            USER: PRERAN S
-          </h2>
+                {project.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 pt-4 border-t border-zinc-200">
+                    {project.tags.map((t) => (
+                      <span
+                        key={t}
+                        className="font-mono text-[11px] px-2.5 py-0.5 rounded bg-white border border-zinc-200 text-zinc-600"
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
 
-          <div className="text-sm leading-relaxed space-y-4">
-            <p>
-              <span className="text-cyan-500 font-bold">{">"} STATUS:</span> 2nd
-              Year Student @ Bangalore Institute of Technology.
-            </p>
+          {/* Collapsible Explore Section */}
+          <div className="mt-8 pt-6 border-t border-zinc-200">
+            <button
+              onClick={() => setShowExplore((v) => !v)}
+              className="font-mono text-xs text-zinc-500 hover:text-zinc-900 transition-colors flex items-center gap-2 mb-4 cursor-pointer"
+            >
+              <span
+                className="inline-block transition-transform duration-200 text-emerald-600"
+                style={{ transform: showExplore ? 'rotate(90deg)' : 'rotate(0deg)' }}
+              >
+                ›
+              </span>
+              <span>{showExplore ? 'collapse explorer' : 'explore other repositories'}</span>
+            </button>
 
-            <p>
-              I don't just write code; I build systems. From creating my own{" "}
-              <span className="text-white font-bold">"Jarvis" AI</span> to
-              open-source tools like{" "}
-              <span className="text-white font-bold">Jumpbot</span>, I love
-              making computers do the heavy lifting.
-            </p>
+            {showExplore && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+                {EXPLORE_PROJECTS.map((p) => (
+                  <a
+                    key={p.id}
+                    href={p.repo}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="p-4 rounded-xl bg-zinc-50 hover:bg-zinc-100 transition-all block group no-underline"
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-mono text-zinc-900 text-sm font-medium group-hover:text-zinc-700">
+                        {p.title}
+                      </span>
+                      <span className="font-mono text-[11px] text-zinc-400 group-hover:text-zinc-600">
+                        {p.lang}
+                      </span>
+                    </div>
+                    <p className="text-zinc-600 text-xs leading-relaxed">{p.desc}</p>
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
 
-            <p>
-              My goal is simple: Build fast, scalable apps using{" "}
-              <span className="text-cyan-300">C++</span>,{" "}
-              <span className="text-cyan-300">Python</span>, and{" "}
-              <span className="text-cyan-300">React</span>.
-            </p>
+        {/* ── GITHUB ACTIVITY (FULL WIDTH) ── */}
+        <section className="-mx-5 sm:-mx-6 px-5 sm:px-6 py-10 bg-zinc-50 border-y border-zinc-200">
+          <div className="max-w-4xl mx-auto">
+            <div className="flex items-center gap-2 mb-6">
+              <FaGithub className="w-4 h-4 text-zinc-500" />
+              <p className="font-mono text-zinc-500 text-sm select-none">// github</p>
+            </div>
 
-            <div className="mt-4 pt-4 border-t border-gray-700">
-              <p className="text-xs text-gray-500">
-                CURRENT_MISSION: BUILDING THE UNIMAGINABLE
-              </p>
+            <div className="mb-6">
+              <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+                <a
+                  href="https://github.com/PRERAN001"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-mono text-sm text-zinc-700 hover:text-zinc-900 transition-colors flex items-center gap-1"
+                >
+                  @PRERAN001 <span className="text-zinc-400">↗</span>
+                </a>
+                <div className="flex items-center gap-4 font-mono text-xs text-zinc-500">
+                  <span><strong className="text-zinc-900">41</strong> repos</span>
+                  <span><strong className="text-zinc-900">8</strong> followers</span>
+                  <span><strong className="text-zinc-900">12</strong> stars</span>
+                </div>
+              </div>
+
+              {/* GitHub Graph */}
+              <div className="bg-white rounded-xl p-5 border border-zinc-200">
+                <GithubGraph
+  account="PRERAN001"
+  months={12}
+  variant="violet"
+  animation="cascade"
+  animationSpeed={1.4}
+  cellSize={12}
+  cellGap={4}
+  cellRadius={6}
+  ambientEffect="twinkle"
+  ambientIntensity={0.7}
+  showLegend
+/>
+              </div>
+            </div>
+
+            {/* Achievements */}
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="font-mono text-xs text-zinc-600 mr-2">achievements:</span>
+              <Badge variant="default" className="bg-emerald-50 text-emerald-700 border-emerald-200">GitHub Pro</Badge>
+              <Badge variant="secondary" className="bg-zinc-100 text-zinc-700 border-zinc-200">YOLO</Badge>
+              <Badge variant="secondary" className="bg-zinc-100 text-zinc-700 border-zinc-200">Pull Shark</Badge>
+              <Badge variant="secondary" className="bg-zinc-100 text-zinc-700 border-zinc-200">Quickdraw</Badge>
             </div>
           </div>
+        </section>
+
+        {/* ── SKILLS ── */}
+        <section>
+          <div className="flex items-center gap-2 mb-6">
+            <Terminal className="w-4 h-4 text-zinc-500" />
+            <p className="font-mono text-zinc-500 text-sm select-none">// skills</p>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            {SKILLS.map((skill) => (
+              <Badge key={skill} variant="default" className="text-xs py-1 px-2.5 bg-zinc-100 text-zinc-700 border-zinc-200 hover:bg-zinc-200">
+                {skill}
+              </Badge>
+            ))}
+          </div>
+        </section>
+
+        {/* ── CONTACT ── */}
+        <section>
+          <div className="flex items-center gap-2 mb-6">
+            <Mail className="w-4 h-4 text-zinc-500" />
+            <p className="font-mono text-zinc-500 text-sm select-none">// contact</p>
+          </div>
+
+          <p className="text-zinc-600 text-sm leading-relaxed mb-6 max-w-md">
+            Open to engineering internships, technical collaborations, and ambitious systems problems.
+            Drop a message directly — I respond quickly.
+          </p>
+
+          <div className="flex flex-wrap items-center gap-6 font-mono text-sm">
+            <a
+              href="mailto:preranshankar@gmail.com"
+              className="text-zinc-900 hover:text-zinc-600 transition-colors flex items-center gap-1.5"
+            >
+              <Mail className="w-4 h-4" />
+              preran248@gmail.com
+            </a>
+            <a
+              href="https://github.com/PRERAN001"
+              target="_blank"
+              rel="noreferrer"
+              className="text-zinc-600 hover:text-zinc-900 transition-colors flex items-center gap-1.5"
+            >
+              <FaGithub className="w-4 h-4" />
+              GitHub
+            </a>
+            <a
+              href="https://www.linkedin.com/in/preran-s-131077345"
+              target="_blank"
+              rel="noreferrer"
+              className="text-zinc-600 hover:text-zinc-900 transition-colors flex items-center gap-1.5"
+            >
+              <FaLinkedin className="w-4 h-4" />
+              LinkedIn
+            </a>
+          </div>
+        </section>
+
+      </main>
+
+      {/* ── FOOTER ── */}
+      <footer className="max-w-4xl mx-auto px-5 sm:px-6 pb-12 border-t border-zinc-200 pt-8">
+        <div className="flex items-center justify-between font-mono text-xs text-zinc-500">
+          <span>© 2026 preran s · bengaluru, in</span>
+          <a
+            href="https://preran-s.me"
+            target="_blank"
+            rel="noreferrer"
+            className="hover:text-zinc-900 transition-colors"
+          >
+            preran-s.me
+          </a>
         </div>
-      </Window>
+      </footer>
 
-      <Window
-        id="projects"
-        title="~/projects"
-        isOpen={windows.projects}
-        onClose={() => toggleWindow("projects")}
-        zIndex={zIndexes.projects}
-        onFocus={() => bringToFront("projects")}
-        initialPosition={{ x: 200, y: 50 }}
-      >
-        <ProjectExplorer />
-      </Window>
-
-      <Window
-        id="contact"
-        title="Contact Me"
-        isOpen={windows.contact}
-        onClose={() => toggleWindow("contact")}
-        zIndex={zIndexes.contact}
-        onFocus={() => bringToFront("contact")}
-      >
-        <Contact />
-      </Window>
-
-      <Window
-        id="terminal"
-        title="Terminal"
-        isOpen={windows.terminal}
-        onClose={() => toggleWindow("terminal")}
-        zIndex={zIndexes.terminal}
-        onFocus={() => bringToFront("terminal")}
-      >
-        <Terminal
-          onClose={() => toggleWindow("terminal")}
-          onCommand={handleCommand}
-        />
-      </Window>
-
-      {/* === 5. OVERLAYS === */}
-      <Spotlight
-        isOpen={isSpotlightOpen}
-        onClose={() => setIsSpotlightOpen(false)}
-        onCommand={handleCommand}
-      />
-
-      {contextMenu.visible && (
-        <ContextMenu
-          x={contextMenu.x}
-          y={contextMenu.y}
-          closeMenu={() => setContextMenu({ ...contextMenu, visible: false })}
-          onCommand={handleCommand}
-        />
-      )}
-
-      <FloatingResume />
-      <Taskbar windows={windows} toggleWindow={toggleWindow} />
     </div>
   );
 }
-
-// === HELPER COMPONENTS ===
-
-const DesktopIcon = ({ icon, label, onClick }) => (
-  <div
-    className="text-center group cursor-pointer w-20"
-    onClick={(e) => {
-      e.stopPropagation();
-      onClick();
-    }}
-  >
-    <div className="w-14 h-14 bg-gray-900/60 backdrop-blur-md rounded-xl border border-gray-600/50 flex items-center justify-center text-2xl group-hover:bg-gray-700/50 transition duration-200 mx-auto text-cyan-400 shadow-lg">
-      {icon}
-    </div>
-    <span className="text-xs text-gray-300 mt-2 block shadow-black drop-shadow-md font-bold">
-      {label}
-    </span>
-  </div>
-);
-
-// Bigger, Touch-friendly Icons for Mobile
-const MobileIcon = ({ icon, label, onClick }) => (
-  <div
-    className="flex flex-col items-center gap-2"
-    onClick={(e) => {
-      e.stopPropagation();
-      onClick();
-    }}
-  >
-    <div className="w-16 h-16 bg-gray-800/80 backdrop-blur-md rounded-2xl border border-gray-600 flex items-center justify-center text-3xl text-cyan-400 shadow-lg active:scale-95 transition-transform">
-      {icon}
-    </div>
-    <span className="text-xs text-gray-300 font-bold shadow-black drop-shadow-md">
-      {label}
-    </span>
-  </div>
-);
-
-export default App;
