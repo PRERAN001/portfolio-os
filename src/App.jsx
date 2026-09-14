@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { Mascot } from 'page-mascot';
 import { TiltCard } from '@/components/ui/TiltCard';
 import { FileTree } from '@/components/ui/FileTree';
-import { Badge } from '@/components/ui/Badge';
+import { Badge } from '@/components/ui/badge';
 import { GithubGraph } from "@/components/unlumen-ui/github-graph";
 import { Code2, Folder, Mail, Terminal, Gamepad2, Trophy, Coffee } from 'lucide-react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa6';
@@ -146,9 +147,10 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-white text-zinc-900 font-sans selection:bg-zinc-900 selection:text-white antialiased">
+      
 
       {/* ── TOP NAVIGATION ── */}
-      <nav className="max-w-4xl mx-auto px-5 sm:px-6 pt-10 pb-0 flex items-center justify-between border-b border-zinc-200 pb-6">
+      <nav className="max-w-4xl mx-auto px-5 sm:px-6 pt-10 pb-6 flex items-center justify-between border-b border-zinc-200">
         <div className="flex items-center gap-2.5">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
           <span className="font-mono text-sm text-zinc-900 font-semibold tracking-wide">
@@ -200,6 +202,10 @@ export default function App() {
           <p className="text-lg sm:text-xl text-zinc-600 font-medium mb-6">
              AI · Systems · Agents · Architecture
           </p>
+          <Mascot
+          directions="/mascots/cap-directions.webp"
+          reactions="/mascots/cap-reactions.webp"
+        />
 
           <p className="text-zinc-600 text-sm sm:text-base leading-relaxed max-w-2xl mb-6">
             Computer Science student architecting autonomous AI agent loops, graph-based execution IDEs,
@@ -227,6 +233,8 @@ export default function App() {
           </div>
         </section>
 
+        
+
         {/* ── FEATURED PROJECTS ── */}
         <section>
           <div className="flex items-center gap-2 mb-6">
@@ -252,7 +260,7 @@ export default function App() {
                       </p>
                     )}
                   </div>
-                  <span className="text-zinc-400 group-hover:text-zinc-600 transition-colors text-lg leading-none mt-0.5 flex-shrink-0">
+                  <span className="text-zinc-400 group-hover:text-zinc-600 transition-colors text-lg leading-none mt-0.5 shrink-0">
                     ↗
                   </span>
                 </div>
