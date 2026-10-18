@@ -5,7 +5,7 @@ import { FileTree } from '@/components/ui/FileTree';
 import { Badge } from '@/components/ui/badge';
 import { GithubGraph } from "@/components/unlumen-ui/github-graph";
 import { Code2, Folder, Mail, Terminal, Gamepad2, Trophy, Coffee } from 'lucide-react';
-import { FaGithub, FaLinkedin } from 'react-icons/fa6';
+import { FaGithub, FaLinkedin,FaBlog } from 'react-icons/fa6';
 
 // ─────────────────────────────────────────────
 // DATA CONFIGURATION
@@ -170,6 +170,15 @@ export default function App() {
           >
             <FaGithub className="w-3.5 h-3.5" />
             GitHub
+          </a>
+           <a
+            href="https://medium.com/@preran248"
+            target="_blank"
+            rel="noreferrer"
+            className="hover:text-zinc-900 transition-colors flex items-center gap-1.5"
+          >
+            <FaBlog className="w-3.5 h-3.5" />
+            Blogs
           </a>
           <a
             href="https://www.linkedin.com/in/preran-s-131077345"
